@@ -1,18 +1,443 @@
 ---
-import SectionPage from "../components/SectionPage.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Prism from "../components/Prism";
+
+const photoMoments = [
+    {
+        title: "Campus Walk",
+        caption: "Golden hour walk across Allegheny campus.",
+        image: "",
+        location: "Meadville, PA",
+    },
+    {
+        title: "Hackathon Night",
+        caption: "Late-night building session with teammates.",
+        image: "",
+        location: "Gatorverse",
+    },
+    {
+        title: "Weekend Reset",
+        caption: "A calm moment away from screens.",
+        image: "",
+        location: "Favorite Spot",
+    },
+    {
+        title: "Club Event",
+        caption: "Community and collaboration outside class.",
+        image: "",
+        location: "Student Center",
+    },
+];
+
+const blogPosts = [
+    {
+        title: "What Leading As An RA Taught Me",
+        excerpt:
+            "Leadership in residential life sharpened how I communicate under pressure, listen actively, and build inclusive spaces.",
+        date: "Apr 2026",
+        readTime: "4 min read",
+        href: "#",
+        tag: "Leadership",
+    },
+    {
+        title: "From Idea To Demo In 36 Hours",
+        excerpt:
+            "A short reflection on shipping quickly at hackathons while keeping quality and team morale high.",
+        date: "Mar 2026",
+        readTime: "5 min read",
+        href: "#",
+        tag: "Hackathons",
+    },
+    {
+        title: "Balancing CS, Econ, and Campus Work",
+        excerpt:
+            "Systems I use to stay organized across coursework, projects, and student-facing roles.",
+        date: "Feb 2026",
+        readTime: "6 min read",
+        href: "#",
+        tag: "Student Life",
+    },
+];
 ---
 
-<SectionPage
-    active="outside-the-ide"
-    title="Outside the IDE"
-    subtitle="Beyond code"
->
-    <p>
-        This page is for everything that makes your portfolio feel human:
-        interests, hobbies, writing, music, travel, or side projects.
-    </p>
-    <p>
-        It gives the site a stronger personal identity outside the technical
-        sections.
-    </p>
-</SectionPage>
+<BaseLayout title="Outside the IDE — Ritesh Ojha">
+<Prism
+    client:only="react"
+    animationType="rotate"
+    glow={1.2}
+    noise={0.25}
+    bloom={1.1}
+    transition:persist
+/>
+<SiteNav active="outside-the-ide" transition:persist />
+
+<main class="outside-page" transition:animate="fade">
+    <section class="hero">
+        <p class="eyebrow">Beyond code</p>
+        <h1>Outside the IDE</h1>
+        <p class="hero-text">
+            A space for photos, writing, and moments that shape how I think,
+            lead, and build.
+        </p>
+    </section>
+
+    <section class="panel">
+        <div class="section-head">
+            <h2>Photo Moments</h2>
+            <p>
+                Add your own photos by setting each card&apos;s image path in
+                <strong>photoMoments</strong> at the top of this file.
+            </p>
+        </div>
+
+        <div class="photo-grid">
+            {
+                photoMoments.map((item) => (
+                    <article class="photo-card">
+                        {item.image ? (
+                            <img
+                                src={item.image}
+                                alt={item.title}
+                                loading="lazy"
+                            />
+                        ) : (
+                            <div class="photo-placeholder" aria-hidden="true">
+                                Add Photo
+                            </div>
+                        )}
+                        <div class="photo-meta">
+                            <h3>{item.title}</h3>
+                            <p>{item.caption}</p>
+                            <span>{item.location}</span>
+                        </div>
+                    </article>
+                ))
+            }
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="section-head">
+            <h2>Blogs & Notes</h2>
+            <p>
+                Update the <strong>blogPosts</strong> list to publish new writing.
+            </p>
+        </div>
+
+        <div class="blog-grid">
+            {
+                blogPosts.map((post) => (
+                    <article class="blog-card">
+                        <p class="blog-tag">{post.tag}</p>
+                        <h3>{post.title}</h3>
+                        <p class="blog-excerpt">{post.excerpt}</p>
+                        <div class="blog-meta">
+                            <span>{post.date}</span>
+                            <span>{post.readTime}</span>
+                        </div>
+                        <a href={post.href}>Read post</a>
+                    </article>
+                ))
+            }
+        </div>
+    </section>
+</main>
+</BaseLayout>
+
+<style>
+    .outside-page {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 7rem 1.5rem 3rem;
+        display: grid;
+        gap: 1rem;
+        overflow-x: hidden;
+    }
+
+    .hero,
+    .panel {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 28px;
+        background:
+            radial-gradient(
+                circle at top left,
+                rgba(255, 255, 255, 0.08),
+                transparent 38%
+            ),
+            rgba(8, 10, 14, 0.72);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(18px);
+        padding: clamp(1.2rem, 2.8vw, 2rem);
+    }
+
+    .eyebrow {
+        margin: 0 0 0.7rem;
+        color: rgba(242, 245, 247, 0.72);
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 0.78rem;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: clamp(2.4rem, 5.4vw, 4.4rem);
+        line-height: 0.96;
+        letter-spacing: -0.04em;
+    }
+
+    .hero-text {
+        margin: 1rem 0 0;
+        color: rgba(242, 245, 247, 0.84);
+        max-width: 66ch;
+        line-height: 1.7;
+    }
+
+    .section-head {
+        margin-bottom: 1rem;
+    }
+
+    .section-head h2 {
+        margin: 0;
+        font-size: clamp(1.2rem, 2vw, 1.5rem);
+        letter-spacing: -0.02em;
+    }
+
+    .section-head p {
+        margin: 0.5rem 0 0;
+        color: rgba(242, 245, 247, 0.76);
+        line-height: 1.55;
+    }
+
+    .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem;
+    }
+
+    .photo-card {
+        overflow: hidden;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .photo-card img,
+    .photo-placeholder {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        display: grid;
+        place-items: center;
+        font-size: 0.92rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .photo-card img {
+        object-fit: cover;
+    }
+
+    .photo-placeholder {
+        color: rgba(242, 245, 247, 0.6);
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.07),
+            rgba(255, 255, 255, 0.02)
+        );
+    }
+
+    .photo-meta {
+        padding: 0.9rem;
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .photo-meta h3 {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .photo-meta p {
+        margin: 0;
+        color: rgba(242, 245, 247, 0.82);
+        line-height: 1.45;
+    }
+
+    .photo-meta span {
+        color: rgba(242, 245, 247, 0.62);
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.9rem;
+    }
+
+    .blog-card {
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        background: rgba(255, 255, 255, 0.03);
+        padding: 1rem;
+        display: grid;
+        gap: 0.65rem;
+    }
+
+    .blog-tag {
+        margin: 0;
+        width: fit-content;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(8, 10, 14, 0.9);
+        background: rgba(248, 251, 255, 0.9);
+        padding: 0.3rem 0.5rem;
+        border-radius: 999px;
+    }
+
+    .blog-card h3 {
+        margin: 0;
+        font-size: 1.02rem;
+        letter-spacing: -0.01em;
+    }
+
+    .blog-excerpt {
+        margin: 0;
+        color: rgba(242, 245, 247, 0.8);
+        line-height: 1.5;
+    }
+
+    .blog-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.4rem;
+        color: rgba(242, 245, 247, 0.62);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .blog-card a {
+        width: fit-content;
+        text-decoration: none;
+        color: rgba(248, 251, 255, 0.94);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        padding: 0.42rem 0.7rem;
+        font-size: 0.84rem;
+        transition:
+            transform 140ms ease,
+            background-color 140ms ease;
+    }
+
+    .blog-card a:hover,
+    .blog-card a:focus-visible {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.08);
+        outline: none;
+    }
+
+    @media (max-width: 900px) {
+        .photo-grid,
+        .blog-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .outside-page {
+            padding: 5.5rem 1rem 2.5rem;
+        }
+
+        .hero,
+        .panel {
+            border-radius: 22px;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 8vw, 3rem);
+        }
+
+        .hero-text {
+            font-size: 0.92rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .outside-page {
+            padding: 5rem 0.85rem 2rem;
+            gap: 0.8rem;
+        }
+
+        .hero,
+        .panel {
+            border-radius: 18px;
+            padding: 1rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        .hero-text {
+            font-size: 0.86rem;
+            margin-top: 0.7rem;
+        }
+
+        .section-head h2 {
+            font-size: 1.15rem;
+        }
+
+        .section-head p {
+            font-size: 0.86rem;
+        }
+
+        .photo-card {
+            border-radius: 14px;
+        }
+
+        .photo-meta {
+            padding: 0.7rem;
+        }
+
+        .photo-meta h3 {
+            font-size: 0.92rem;
+        }
+
+        .photo-meta p {
+            font-size: 0.86rem;
+        }
+
+        .blog-card {
+            border-radius: 14px;
+            padding: 0.85rem;
+        }
+
+        .blog-card h3 {
+            font-size: 0.92rem;
+        }
+
+        .blog-excerpt {
+            font-size: 0.84rem;
+        }
+    }
+
+    @media (max-width: 380px) {
+        .outside-page {
+            padding: 4.5rem 0.65rem 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.55rem;
+        }
+
+        .hero,
+        .panel {
+            padding: 0.85rem;
+        }
+    }
+</style>
+

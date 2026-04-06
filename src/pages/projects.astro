@@ -1,11 +1,612 @@
 ---
-import SectionPage from "../components/SectionPage.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Prism from "../components/Prism";
+import TextType from "../components/TextType";
+
+const projects = [
+    {
+        id: "bizmap",
+        title: "BizMap",
+        subtitle: "Full-Stack SaaS Compliance Platform",
+        date: "Feb 2026",
+        description:
+            "A comprehensive SaaS platform designed to streamline business formation and compliance management. Built with modern technologies, BizMap helps first-time entrepreneurs navigate permits, inspections, and regulatory requirements with an intuitive dashboard.",
+        features: [
+            "Authentication & user onboarding",
+            "Compliance task tracking",
+            "Permits and inspections management",
+            "Real-time progress tracking",
+            "Responsive dashboard UI",
+        ],
+        technologies: [
+            "Next.js 14",
+            "TypeScript",
+            "Tailwind CSS",
+            "Supabase",
+            "PostgreSQL",
+        ],
+        links: [
+            {
+                label: "Live Site",
+                url: "https://biz-map.vercel.app/",
+            },
+            {
+                label: "GitHub",
+                url: "https://github.com/ojharitesh/Launch_Navigator",
+            },
+        ],
+    },
+    {
+        id: "nearGo",
+        title: "NearGo",
+        subtitle: "Location-Based iOS Event Discovery App",
+        date: "Aug 2025",
+        description:
+            "An iOS application that solves the fragmented local event discovery problem by aggregating nearby events and displaying them on an interactive map. Designed with usability at its core, NearGo uses RESTful APIs to fetch real-time event data.",
+        features: [
+            "Location-based event discovery",
+            "Interactive map interface",
+            "Real-time event aggregation",
+            "MVC architecture",
+            "RESTful API integration",
+        ],
+        technologies: ["Swift", "UIKit", "URLSession", "RESTful APIs", "iOS"],
+        links: [
+            {
+                label: "GitHub Repository",
+                url: "https://github.com/riteshhojha/finalproject-swift",
+            },
+        ],
+    },
+    {
+        id: "skillbridge",
+        title: "Skill-Bridge",
+        subtitle: "Interdisciplinary Collaboration Platform",
+        date: "April 2025",
+        description:
+            "A cross-functional collaboration platform built during the Gatorverse Hackathon. Led a team of 3 members to deliver a working prototype in 36 hours, implementing real-time chat and backend integration for seamless team communication.",
+        features: [
+            "Real-time chat functionality",
+            "Cross-disciplinary collaboration",
+            "Backend integration",
+            "Team management",
+            "Live communication",
+        ],
+        technologies: ["Python", "Flask", "Real-time Communication", "Backend"],
+        links: [
+            {
+                label: "GitHub Repository",
+                url: "https://github.com/ojharitesh/SKILLBRIDGE-gatorverse-hackathon-project",
+            },
+        ],
+    },
+];
 ---
 
-<SectionPage active="projects" title="Projects" subtitle="Selected work">
-    <p>
-        A curated collection of portfolio builds, experiments, and shipped
-        interfaces can live here.
-    </p>
-    <p>Add your project cards, screenshots, or live links in this section.</p>
-</SectionPage>
+<BaseLayout title="Projects — Ritesh Ojha">
+<Prism
+    client:only="react"
+    animationType="rotate"
+    glow={1.2}
+    noise={0.25}
+    bloom={1.1}
+    transition:persist
+/>
+<SiteNav active="projects" transition:persist />
+
+<main transition:animate="fade">
+    <!-- Page Header -->
+    <section class="page-hero">
+        <div class="page-title">
+            <TextType
+                client:only="react"
+                as="h1"
+                text={["Projects"]}
+                typingSpeed={65}
+                pauseDuration={1500}
+                deletingSpeed={45}
+                loop={false}
+                showCursor={false}
+                className="page-title-text"
+            />
+            <p class="page-subtitle">
+                Full-Stack & Mobile Applications Built With Care
+            </p>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section class="projects-section">
+        <div class="projects-container">
+            {
+                projects.map((project, index) => (
+                    <article class="project-card">
+                        <div class="project-header">
+                            <div class="project-title-group">
+                                <h2 class="project-title">{project.title}</h2>
+                                <p class="project-subtitle">
+                                    {project.subtitle}
+                                </p>
+                            </div>
+                            <span class="project-date">{project.date}</span>
+                        </div>
+
+                        <div class="project-description-wrapper">
+                            <p class="project-description">
+                                {project.description}
+                            </p>
+                        </div>
+
+                        <div class="project-features">
+                            <h3 class="features-label">Key Features</h3>
+                            <ul class="features-list">
+                                {project.features.map((feature) => (
+                                    <li class="feature-item">
+                                        <span class="feature-bullet">→</span>
+                                        <span>{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div class="project-tech">
+                            <h3 class="tech-label">Technologies</h3>
+                            <div class="tech-tags">
+                                {project.technologies.map((tech) => (
+                                    <span class="tech-tag">{tech}</span>
+                                ))}
+                            </div>
+                        </div>
+
+                        {project.links.length > 0 && (
+                            <div class="project-links">
+                                {project.links.map((link) => (
+                                    <a
+                                        href={link.url}
+                                        target="_blank"
+                                        rel="noreferrer noopener"
+                                        class="project-link"
+                                    >
+                                        {link.label}
+                                        <span class="link-icon">↗</span>
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+                    </article>
+                ))
+            }
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="projects-cta-section">
+        <div class="projects-cta">
+            <p class="cta-label">Ready to collaborate?</p>
+            <h2 class="cta-title">Let's bring ideas to life</h2>
+            <a href="/#about" class="cta-button">Get in Touch</a>
+        </div>
+    </section>
+</main>
+</BaseLayout>
+
+<style>
+    main {
+        position: relative;
+        width: 100%;
+        min-height: auto;
+    }
+
+    .page-hero {
+        position: relative;
+        min-height: 50vh;
+        display: grid;
+        place-items: center;
+        padding: 6rem 1.5rem 4rem;
+    }
+
+    .page-title {
+        text-align: center;
+        z-index: 5;
+    }
+
+    :global(.page-title-text) {
+        margin: 0;
+        font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        color: #f8fbff;
+        text-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .page-subtitle {
+        margin: 1rem 0 0;
+        color: rgba(242, 245, 247, 0.75);
+        font-size: clamp(0.95rem, 1.35vw, 1.2rem);
+        letter-spacing: 0.02em;
+        font-weight: 400;
+    }
+
+    .projects-section {
+        position: relative;
+        z-index: 6;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 4rem;
+    }
+
+    .projects-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .project-card {
+        padding: 2rem;
+        border-radius: 24px;
+        background: rgba(6, 9, 14, 0.58);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(5px);
+        transition:
+            transform 160ms ease,
+            box-shadow 160ms ease;
+    }
+
+    .project-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 28px 60px rgba(0, 0, 0, 0.45);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .project-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .project-title-group {
+        flex: 1;
+    }
+
+    .project-title {
+        margin: 0;
+        font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+        font-weight: 700;
+        color: rgba(248, 251, 255, 0.98);
+        letter-spacing: -0.01em;
+    }
+
+    .project-subtitle {
+        margin: 0.5rem 0 0;
+        font-size: 0.95rem;
+        color: rgba(242, 245, 247, 0.72);
+        font-weight: 400;
+        letter-spacing: 0.01em;
+    }
+
+    .project-date {
+        padding: 0.4rem 0.85rem;
+        border-radius: 8px;
+        background: rgba(8, 12, 16, 0.72);
+        color: rgba(242, 245, 247, 0.8);
+        font-size: 0.82rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+    }
+
+    .project-description-wrapper {
+        margin-bottom: 1.75rem;
+    }
+
+    .project-description {
+        margin: 0;
+        color: rgba(248, 251, 255, 0.88);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        letter-spacing: 0.01em;
+    }
+
+    .project-features {
+        margin-bottom: 1.75rem;
+    }
+
+    .features-label {
+        margin: 0 0 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: rgba(242, 245, 247, 0.85);
+    }
+
+    .features-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.65rem;
+        color: rgba(242, 245, 247, 0.78);
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .feature-bullet {
+        color: rgba(248, 251, 255, 0.4);
+        flex-shrink: 0;
+        font-weight: 700;
+        margin-top: 1px;
+    }
+
+    .project-tech {
+        margin-bottom: 1.75rem;
+    }
+
+    .tech-label {
+        margin: 0 0 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: rgba(242, 245, 247, 0.85);
+    }
+
+    .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+    }
+
+    .tech-tag {
+        padding: 0.45rem 0.95rem;
+        border-radius: 12px;
+        background: rgba(8, 12, 16, 0.68);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: rgba(248, 251, 255, 0.88);
+        font-size: 0.82rem;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        transition: all 140ms ease;
+    }
+
+    .tech-tag:hover {
+        background: rgba(8, 12, 16, 0.88);
+        border-color: rgba(255, 255, 255, 0.18);
+        color: #ffffff;
+    }
+
+    .project-links {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        padding-top: 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .project-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 999px;
+        background: rgba(248, 251, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        color: rgba(248, 251, 255, 0.92);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        transition: all 140ms ease;
+    }
+
+    .project-link:hover,
+    .project-link:focus-visible {
+        background: rgba(248, 251, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.24);
+        color: #ffffff;
+        transform: translateY(-1px);
+        outline: none;
+    }
+
+    .link-icon {
+        font-size: 0.85rem;
+        opacity: 0.7;
+        transition: opacity 140ms ease;
+    }
+
+    .project-link:hover .link-icon,
+    .project-link:focus-visible .link-icon {
+        opacity: 1;
+    }
+
+    .projects-cta-section {
+        position: relative;
+        z-index: 6;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+    }
+
+    .projects-cta {
+        padding: 3rem;
+        border-radius: 24px;
+        background: rgba(0, 0, 0, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(8px);
+        text-align: center;
+    }
+
+    .cta-label {
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: rgba(242, 245, 247, 0.8);
+    }
+
+    .cta-title {
+        margin: 0.8rem 0 0;
+        font-size: clamp(1.5rem, 3vw, 2.1rem);
+        font-weight: 700;
+        color: #f8fbff;
+        letter-spacing: -0.02em;
+    }
+
+    .cta-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 999px;
+        background: rgba(248, 251, 255, 0.95);
+        color: #0b0d10;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: 0.02em;
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        transition: all 160ms ease;
+    }
+
+    .cta-button:hover,
+    .cta-button:focus-visible {
+        background: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+        outline: none;
+    }
+
+    @media (max-width: 768px) {
+        .page-hero {
+            min-height: 35vh;
+            padding: 5.5rem 1rem 2.5rem;
+        }
+
+        .project-card {
+            padding: 1.5rem 1.25rem;
+        }
+
+        .project-header {
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .project-date {
+            align-self: flex-start;
+        }
+
+        .projects-section {
+            padding: 1.5rem 1rem 3rem;
+        }
+
+        .projects-cta {
+            padding: 2rem 1.25rem;
+        }
+
+        .cta-title {
+            font-size: 1.35rem;
+        }
+
+        .project-links {
+            flex-direction: column;
+        }
+
+        .project-link {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .projects-cta-section {
+            padding: 2rem 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        :global(.page-title-text) {
+            font-size: clamp(1.8rem, 9vw, 2.5rem);
+        }
+
+        .page-subtitle {
+            font-size: 0.85rem;
+        }
+
+        .page-hero {
+            min-height: 28vh;
+            padding: 5rem 0.85rem 2rem;
+        }
+
+        .project-card {
+            padding: 1.15rem 1rem;
+            border-radius: 18px;
+        }
+
+        .project-title {
+            font-size: 1.2rem;
+        }
+
+        .project-subtitle {
+            font-size: 0.85rem;
+        }
+
+        .project-description {
+            font-size: 0.88rem;
+        }
+
+        .feature-item {
+            font-size: 0.84rem;
+        }
+
+        .tech-tag {
+            padding: 0.38rem 0.7rem;
+            font-size: 0.76rem;
+        }
+
+        .project-header {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 1rem;
+        }
+
+        .project-description-wrapper {
+            margin-bottom: 1.25rem;
+        }
+
+        .project-features {
+            margin-bottom: 1.25rem;
+        }
+
+        .project-tech {
+            margin-bottom: 1.25rem;
+        }
+    }
+
+    @media (max-width: 380px) {
+        .project-card {
+            padding: 1rem 0.85rem;
+        }
+
+        .projects-section {
+            padding: 1rem 0.75rem 2.5rem;
+        }
+
+        .cta-button {
+            width: 100%;
+            padding: 0.7rem 1rem;
+        }
+    }
+</style>
+

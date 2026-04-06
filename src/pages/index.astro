@@ -1,5 +1,6 @@
 ---
 // @ts-nocheck
+import BaseLayout from "../layouts/BaseLayout.astro";
 import SiteNav from "../components/SiteNav.astro";
 import Prism from "../components/Prism";
 import Lanyard from "../components/Lanyard";
@@ -9,22 +10,24 @@ import HeroSocials from "../components/HeroSocials";
 import ScrollVelocity from "../components/ScrollVelocity";
 ---
 
+<BaseLayout title="Ritesh Ojha — Portfolio">
 <Prism
     client:only="react"
     animationType="rotate"
     glow={1.2}
     noise={0.25}
     bloom={1.1}
+    transition:persist
 />
-<SiteNav active="home" />
+<SiteNav active="home" transition:persist />
 
-<main>
+<main transition:animate="fade">
     <section class="home-hero">
         <section class="home-title">
             <TextType
                 client:only="react"
                 as="h1"
-                text={["Welcome to \n Ritesh's Portfolio"]}
+                text={["Hi, I'm \n Ritesh Ojha"]}
                 typingSpeed={65}
                 pauseDuration={1500}
                 deletingSpeed={45}
@@ -52,7 +55,7 @@ import ScrollVelocity from "../components/ScrollVelocity";
         </section>
         <Lanyard
             client:only="react"
-            position={[0, 0, 20]}
+            position={[-7, 0, 20]}
             gravity={[0, -40, 0]}
         />
     </section>
@@ -108,28 +111,9 @@ import ScrollVelocity from "../components/ScrollVelocity";
         />
     </section>
 </main>
+</BaseLayout>
 
 <style>
-    @import url("https://fonts.cdnfonts.com/css/open-sauce-one");
-    :global(html),
-    :global(body) {
-        color-scheme: dark;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        min-height: 100%;
-        overflow-x: hidden;
-        overflow-y: auto;
-        background: radial-gradient(
-            circle at 20% 20%,
-            #1b2028 0%,
-            #0b0d10 45%,
-            #050608 100%
-        );
-        color: #f2f5f7;
-        font-family: "Open Sauce One", sans-serif;
-    }
-
     main {
         position: relative;
         width: 100%;
@@ -336,7 +320,7 @@ import ScrollVelocity from "../components/ScrollVelocity";
     :global(.about-reveal-text) {
         margin: 0;
         color: rgba(248, 251, 255, 0.98);
-        font-size: clamp(0.95rem, 1.4vw, 1.15rem)  !important;
+        font-size: clamp(0.95rem, 1.4vw, 1.15rem) !important;
         line-height: 1.38;
         font-weight: 600;
         letter-spacing: -0.01em;
@@ -390,17 +374,73 @@ import ScrollVelocity from "../components/ScrollVelocity";
         }
 
         .hero-cta-row {
-            flex-wrap: wrap;
-            justify-content: center;
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+            max-width: 280px;
         }
 
         .hero-cta {
-            min-width: 7.9rem;
-            padding: 0.58rem 0.9rem;
+            min-width: unset;
+            width: 100%;
+            padding: 0.7rem 1rem;
+            font-size: 0.88rem;
+            justify-content: center;
         }
 
         .about-section {
-            padding-top: 5rem;
+            padding: 4rem 1rem 4rem;
+        }
+
+        .mini-stats-section {
+            padding: 1rem 1rem 1.5rem;
+        }
+
+        .tech-strip-section {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        :global(.home-title-text) {
+            font-size: clamp(1.6rem, 8vw, 2.4rem);
+        }
+
+        .hero-tagline {
+            font-size: 0.78rem;
+            letter-spacing: 0.02em;
+        }
+
+        .mini-stat-label {
+            font-size: 0.76rem;
+        }
+
+        .mini-stat-note {
+            font-size: 0.74rem;
+        }
+
+        .about-description-bg {
+            border-radius: 18px;
+        }
+
+        :global(.about-reveal-text) {
+            font-size: 0.92rem !important;
+        }
+    }
+
+    @media (max-width: 380px) {
+        :global(.home-title-text) {
+            font-size: 1.55rem;
+        }
+
+        .hero-cta-row {
+            max-width: 240px;
+        }
+
+        .hero-cta {
+            padding: 0.6rem 0.8rem;
+            font-size: 0.82rem;
         }
     }
 </style>

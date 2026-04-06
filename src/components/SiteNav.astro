@@ -8,6 +8,7 @@ const navItems = [
     { label: "Skills", href: "/skills", id: "skills" },
     {
         label: "Outside the IDE",
+        shortLabel: "Beyond",
         href: "/outside-the-ide",
         id: "outside-the-ide",
     },
@@ -22,7 +23,10 @@ const navItems = [
                 aria-current={active === item.id ? "page" : undefined}
                 class:list={{ active: active === item.id }}
             >
-                {item.label}
+                <span class="nav-full">{item.label}</span>
+                {item.shortLabel && (
+                    <span class="nav-short">{item.shortLabel}</span>
+                )}
             </a>
         ))
     }
@@ -76,16 +80,54 @@ const navItems = [
         outline: none;
     }
 
+    /* Short labels hidden by default */
+    .nav-short {
+        display: none;
+    }
+
+    /* ── Tablet / small desktop ── */
     @media (max-width: 700px) {
         .site-nav {
             top: 1rem;
-            gap: 0.2rem;
-            padding: 0.55rem 0.6rem;
+            gap: 0.15rem;
+            padding: 0.5rem 0.55rem;
         }
 
         .site-nav a {
-            padding: 0.45rem 0.65rem;
-            font-size: 0.82rem;
+            padding: 0.42rem 0.6rem;
+            font-size: 0.8rem;
+        }
+    }
+
+    /* ── Small phones ── */
+    @media (max-width: 480px) {
+        .site-nav {
+            top: 0.75rem;
+            gap: 0.1rem;
+            padding: 0.42rem 0.45rem;
+        }
+
+        .site-nav a {
+            padding: 0.38rem 0.5rem;
+            font-size: 0.72rem;
+            letter-spacing: 0;
+        }
+
+        /* Switch to short label for links that have one */
+        .nav-short {
+            display: inline;
+        }
+        a:has(.nav-short) .nav-full {
+            display: none;
+        }
+    }
+
+    /* ── Very small phones (< 380px) ── */
+    @media (max-width: 380px) {
+        .site-nav a {
+            padding: 0.35rem 0.4rem;
+            font-size: 0.68rem;
         }
     }
 </style>
+

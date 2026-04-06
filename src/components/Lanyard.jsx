@@ -45,6 +45,7 @@ export default function Lanyard({
                 dpr={[1, isMobile ? 1.5 : 2]}
                 gl={{ alpha: transparent }}
                 onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
+                onPointerMissed={() => window.dispatchEvent(new Event('lanyard-pointer-missed'))}
             >
                 <ambientLight intensity={Math.PI} />
                 <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
@@ -97,6 +98,11 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
     const ang = new THREE.Vector3();
     const rot = new THREE.Vector3();
     const dir = new THREE.Vector3();
+    const defaultCardPosition = new THREE.Vector3(2, 0, 0);
+
+    const dragBounds = isMobile
+        ? { minX: -2.8, maxX: 3.2, minY: -3.8, maxY: 4.2, minZ: -4, maxZ: 5 }
+        : { minX: -4.5, maxX: 5.5, minY: -5.8, maxY: 5.6, minZ: -6, maxZ: 6 };
 
     const segmentProps = {
         type: 'dynamic',
@@ -121,6 +127,8 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
 
     const [dragged, drag] = useState(false);
     const [hovered, hover] = useState(false);
+    const pointerDownTime = useRef(0);
+    const pointerDownPos = useRef({ x: 0, y: 0 });
 
     useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
     useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
@@ -139,20 +147,49 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
         return undefined;
     }, [hovered, dragged]);
 
+    useEffect(() => {
+        const handlePointerRelease = () => drag(false);
+        window.addEventListener('pointerup', handlePointerRelease);
+        window.addEventListener('lanyard-pointer-missed', handlePointerRelease);
+
+        return () => {
+            window.removeEventListener('pointerup', handlePointerRelease);
+            window.removeEventListener('lanyard-pointer-missed', handlePointerRelease);
+        };
+    }, []);
+
     useFrame((state, delta) => {
         if (dragged) {
             vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
             dir.copy(vec).sub(state.camera.position).normalize();
             vec.add(dir.multiplyScalar(state.camera.position.length()));
             [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
+
+            const nextX = THREE.MathUtils.clamp(vec.x - dragged.x, dragBounds.minX, dragBounds.maxX);
+            const nextY = THREE.MathUtils.clamp(vec.y - dragged.y, dragBounds.minY, dragBounds.maxY);
+            const nextZ = THREE.MathUtils.clamp(vec.z - dragged.z, dragBounds.minZ, dragBounds.maxZ);
+
             card.current?.setNextKinematicTranslation({
-                x: vec.x - dragged.x,
-                y: vec.y - dragged.y,
-                z: vec.z - dragged.z
+                x: nextX,
+                y: nextY,
+                z: nextZ
             });
         }
 
         if (fixed.current && j1.current && j2.current && j3.current && card.current) {
+            const cardPos = card.current.translation();
+            if (
+                Math.abs(cardPos.x) > 12 ||
+                Math.abs(cardPos.y) > 12 ||
+                Math.abs(cardPos.z) > 12
+            ) {
+                card.current.setTranslation(defaultCardPosition, true);
+                card.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+                card.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
+                drag(false);
+                return;
+            }
+
             [j1, j2].forEach((ref) => {
                 if (!ref.current.lerped) {
                     ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
@@ -214,9 +251,20 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
                         onPointerOut={() => hover(false)}
                         onPointerUp={(e) => {
                             e.target.releasePointerCapture(e.pointerId);
+                            const elapsed = Date.now() - pointerDownTime.current;
+                            const dx = e.clientX - pointerDownPos.current.x;
+                            const dy = e.clientY - pointerDownPos.current.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            // Quick tap with little movement = flip
+                            if (elapsed < 250 && dist < 10 && card.current) {
+                                card.current.wakeUp();
+                                card.current.setAngvel({ x: 0, y: 15, z: 0 });
+                            }
                             drag(false);
                         }}
                         onPointerDown={(e) => {
+                            pointerDownTime.current = Date.now();
+                            pointerDownPos.current = { x: e.clientX, y: e.clientY };
                             e.target.setPointerCapture(e.pointerId);
                             drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
                         }}

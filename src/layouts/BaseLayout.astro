@@ -1,0 +1,91 @@
+---
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+const {
+    title = "Ritesh Ojha — CS & Economics",
+    description = "Personal portfolio of Ritesh Ojha — CS & Economics at Allegheny College.",
+} = Astro.props;
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={description} />
+        <title>{title}</title>
+        <link
+            rel="preconnect"
+            href="https://fonts.cdnfonts.com"
+            crossorigin="anonymous"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.cdnfonts.com/css/open-sauce-one"
+        />
+        <ClientRouter />
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>
+
+<style is:global>
+    /* Box-sizing reset – prevents padding from causing overflow */
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        color-scheme: dark;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: radial-gradient(
+            circle at 20% 20%,
+            #1b2028 0%,
+            #0b0d10 45%,
+            #050608 100%
+        );
+        color: #f2f5f7;
+        font-family: "Open Sauce One", sans-serif;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── Smooth page-transition keyframes ── */
+    @keyframes page-fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes page-fade-out {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+    }
+</style>

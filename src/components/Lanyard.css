@@ -1,17 +1,44 @@
 .lanyard-wrapper {
-    position: relative;
-    z-index: 1;
-    width: 100%;
+    position: absolute;
+    right: 2vw;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    width: 50%;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    transform: translateX(32vw) scale(1);
-    transform-origin: center;
+    pointer-events: none;
 }
 
+/* Tablet */
 @media (max-width: 900px) {
     .lanyard-wrapper {
-        transform: translateX(0) scale(1);
+        width: 42%;
+        right: 0;
+        height: 75vh;
+    }
+}
+
+/* Mobile – keep it right-side, full height so rope isn't cut */
+@media (max-width: 600px) {
+    .lanyard-wrapper {
+        width: 35%;
+        right: -4vw;
+        top: 0;
+        transform: none;
+        height: 100vh;
+        pointer-events: auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .lanyard-wrapper {
+        width: 32%;
+        right: -5vw;
+        top: 0;
+        transform: none;
+        height: 100vh;
     }
 }

@@ -4,9 +4,9 @@ import SiteNav from "./SiteNav.astro";
 const { active, title, subtitle } = Astro.props;
 ---
 
-<SiteNav active={active} />
+<SiteNav active={active} transition:persist />
 
-<main class="section-shell">
+<main class="section-shell" transition:animate="fade">
     <section class="hero-card">
         {subtitle ? <p class="eyebrow">{subtitle}</p> : null}
         <h1>{title}</h1>
@@ -73,11 +73,46 @@ const { active, title, subtitle } = Astro.props;
 
     @media (max-width: 700px) {
         .section-shell {
-            padding-top: 6.5rem;
+            padding-top: 5.5rem;
         }
 
         .hero-card {
-            border-radius: 24px;
+            border-radius: 22px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .section-shell {
+            padding: 5rem 0.85rem 1.5rem;
+        }
+
+        .hero-card {
+            padding: 1.15rem;
+            border-radius: 18px;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 9vw, 2.5rem);
+        }
+
+        .content {
+            font-size: 0.92rem;
+            gap: 0.8rem;
+        }
+    }
+
+    @media (max-width: 380px) {
+        .section-shell {
+            padding: 4.5rem 0.65rem 1.5rem;
+        }
+
+        .hero-card {
+            padding: 1rem;
+        }
+
+        h1 {
+            font-size: 1.55rem;
         }
     }
 </style>
+
