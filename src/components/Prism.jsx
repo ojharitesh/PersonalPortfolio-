@@ -44,7 +44,8 @@ const Prism = ({
         const HOVSTR = Math.max(0, hoverStrength || 1);
         const INERT = Math.max(0, Math.min(1, inertia || 0.12));
 
-        const dpr = Math.min(2, window.devicePixelRatio || 1);
+        const isMobileDevice = window.innerWidth < 768;
+        const dpr = isMobileDevice ? 1 : Math.min(2, window.devicePixelRatio || 1);
         const renderer = new Renderer({
             dpr,
             alpha: transparent,
@@ -95,6 +96,7 @@ const Prism = ({
       uniform float uMinAxis;
       uniform float uPxScale;
       uniform float uTimeScale;
+      uniform int   uMaxSteps;
 
       vec4 tanh4(vec4 x){
         vec4 e2x = exp(2.0*x);
@@ -160,6 +162,7 @@ const Prism = ({
 
         const int STEPS = 100;
         for (int i = 0; i < STEPS; i++) {
+          if (i >= uMaxSteps) break;
           p = vec3(f, z);
           p.xz = p.xz * wob;
           p = uRot * p;
@@ -217,7 +220,8 @@ const Prism = ({
                 uPxScale: {
                     value: 1 / ((gl.drawingBufferHeight || 1) * 0.1 * SCALE)
                 },
-                uTimeScale: { value: TS }
+                uTimeScale: { value: TS },
+                uMaxSteps: { value: isMobileDevice ? 40 : 100 }
             }
         });
         const mesh = new Mesh(gl, { geometry, program });
