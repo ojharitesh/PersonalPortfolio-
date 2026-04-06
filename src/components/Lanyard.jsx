@@ -242,10 +242,10 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
                     {...segmentProps}
                     type={dragged ? 'kinematicPosition' : 'dynamic'}
                 >
-                    <CuboidCollider args={isMobile ? [0.6, 0.85, 0.01] : [0.8, 1.125, 0.01]} />
+                    <CuboidCollider args={[0.8, 1.125, 0.01]} />
                     <group
-                        scale={isMobile ? 1.6 : 2.25}
-                        position={isMobile ? [0, -0.9, -0.05] : [0, -1.2, -0.05]}
+                        scale={2.25}
+                        position={[0, -1.2, -0.05]}
                         rotation={[0, Math.PI, 0]}
                         onPointerOver={() => hover(true)}
                         onPointerOut={() => hover(false)}
