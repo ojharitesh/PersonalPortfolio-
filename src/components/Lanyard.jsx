@@ -32,17 +32,34 @@ export default function Lanyard({
         typeof window !== 'undefined' ? window.innerWidth < 768 : false
     );
 
+    const [isVisible, setIsVisible] = useState(true);
+    const containerRef = useRef(null);
+
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        
+        // PERFORMANCE: Pause rendering when lanyard is off-screen
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsVisible(entry.isIntersecting),
+            { threshold: 0 }
+        );
+        if (containerRef.current) observer.observe(containerRef.current);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            observer.disconnect();
+        };
     }, []);
 
     return (
-        <div className="lanyard-wrapper">
+        <div className="lanyard-wrapper" ref={containerRef}>
             <Canvas
                 camera={{ position, fov }}
-                dpr={[1, isMobile ? 1.5 : 2]}
+                // PERFORMANCE: Locked DPR to 1.0
+                dpr={1.0}
+                // PERFORMANCE: Pause loop when not visible
+                frameloop={isVisible ? 'always' : 'never'}
                 gl={{ alpha: transparent }}
                 onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
                 onPointerMissed={() => window.dispatchEvent(new Event('lanyard-pointer-missed'))}

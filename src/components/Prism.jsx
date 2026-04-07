@@ -44,8 +44,9 @@ const Prism = ({
         const HOVSTR = Math.max(0, hoverStrength || 1);
         const INERT = Math.max(0, Math.min(1, inertia || 0.12));
 
+        // PERFORMANCE: Locked DPR to 1.0. Higher density is not needed for a blurred background.
         const isMobileDevice = window.innerWidth < 768;
-        const dpr = isMobileDevice ? 1 : Math.min(2, window.devicePixelRatio || 1);
+        const dpr = 1.0;
         const renderer = new Renderer({
             dpr,
             alpha: transparent,
@@ -221,7 +222,7 @@ const Prism = ({
                     value: 1 / ((gl.drawingBufferHeight || 1) * 0.1 * SCALE)
                 },
                 uTimeScale: { value: TS },
-                uMaxSteps: { value: isMobileDevice ? 40 : 100 }
+                uMaxSteps: { value: isMobileDevice ? 25 : 60 }
             }
         });
         const mesh = new Mesh(gl, { geometry, program });
@@ -334,8 +335,17 @@ const Prism = ({
             program.uniforms.uUseBaseWobble.value = 1;
         }
 
+        let lastRenderTime = 0;
         const render = t => {
             const time = (t - t0) * 0.001;
+            
+            // PERFORMANCE: Cap background at ~30 FPS (33ms per frame)
+            if (t - lastRenderTime < 33) {
+                raf = requestAnimationFrame(render);
+                return;
+            }
+            lastRenderTime = t;
+
             program.uniforms.iTime.value = time;
 
             let continueRAF = true;
